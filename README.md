@@ -1,20 +1,21 @@
 # Moscow-random-
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Московская Рулетка 3.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Московская Рулетка</title>
 <style>
 :root{
-  --bg:#f4f6fb;
-  --card:#ffffff;
+  --bg:#f0f2f5;
+  --card:#fff;
   --text:#222;
   --accent:#ff4d6d;
 }
 body.dark{
-  --bg:#0f1115;
-  --card:#1c1f26;
-  --text:#f1f1f1;
+  --bg:#111;
+  --card:#1b1e28;
+  --text:#f0f0f0;
   --accent:#ff7a90;
 }
 body{
@@ -27,42 +28,44 @@ body{
 .container{
   max-width:500px;
   margin:auto;
-  padding:20px;
+  padding:15px;
   text-align:center;
 }
-h1{margin-top:20px;}
+h1{
+  margin:15px 0;
+}
 .card{
   background:var(--card);
-  padding:20px;
   border-radius:20px;
-  margin:25px 0;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+  padding:15px;
+  margin:20px 0;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
   transition:0.3s;
 }
 button{
   background:var(--accent);
-  color:white;
+  color:#fff;
   border:none;
-  padding:12px 22px;
   border-radius:30px;
-  font-size:15px;
+  padding:12px 20px;
+  font-size:16px;
   cursor:pointer;
-  margin:8px;
+  margin:5px;
   transition:0.2s;
 }
 button:hover{transform:scale(1.05);}
 img{
   width:100%;
   border-radius:15px;
-  margin-top:15px;
-  max-height:260px;
+  margin-top:10px;
+  max-height:250px;
   object-fit:cover;
 }
 .result{
-  font-size:18px;
   font-weight:600;
   margin-top:10px;
-  min-height:40px;
+  min-height:30px;
+  font-size:18px;
 }
 .spin{
   animation:spin 0.6s linear infinite;
@@ -86,89 +89,142 @@ img{
 <button onclick="toggleDark()">🌙</button>
 </div>
 <button onclick="surprise()">🔥 Удиви меня</button>
+
 <div class="card">
 <button onclick="spinPlace()">Куда пойти?</button>
 <div id="place" class="result"></div>
-<img id="placeImg">
+<img id="placeImg" src="">
 </div>
+
 <div class="card">
 <button onclick="spinActivity()">Чем заняться?</button>
 <div id="activity" class="result"></div>
-<img id="activityImg">
+<img id="activityImg" src="">
 </div>
+
 <div class="card">
 <button onclick="spinOutfit()">В чем пойти?</button>
 <div id="outfit" class="result"></div>
-<img id="outfitImg">
+<img id="outfitImg" src="">
 </div>
 </div>
+
 <script>
-// 30 мест
 const places=[
-"Парк Горького","ВДНХ","Красная площадь","Москва-Сити",
-"Патриаршие пруды","Хлебозавод","Флакон","Измайловский парк",
-"Сад Эрмитаж","Серебряный бор","Коломенское","Винзавод",
-"Чистые пруды","Кусково","Ботанический сад","Зарядье",
-"Лосиный остров","Китай-город","Таганка","Даниловский рынок",
-"Крутицкое подворье","Сад Баумана","Аптекарский огород",
-"Парк Сокольники","Музеон","Симонов монастырь",
-"Новодевичий монастырь","ГЭС-2","Парк Яуза","Северный речной вокзал"
+{ name:"Парк Горького", img:"https://source.unsplash.com/600x400/?gorky-park,moscow" },
+{ name:"ВДНХ", img:"https://source.unsplash.com/600x400/?vdnh,moscow" },
+{ name:"Красная площадь", img:"https://source.unsplash.com/600x400/?red-square,moscow" },
+{ name:"Москва-Сити", img:"https://source.unsplash.com/600x400/?moscow-city" },
+{ name:"Патриаршие пруды", img:"https://source.unsplash.com/600x400/?patriarch-ponds,moscow" },
+{ name:"Хлебозавод", img:"https://source.unsplash.com/600x400/?bread-factory,moscow" },
+{ name:"Флакон", img:"https://source.unsplash.com/600x400/?flacon,moscow" },
+{ name:"Измайловский парк", img:"https://source.unsplash.com/600x400/?izmailovsky-park" },
+{ name:"Сад Эрмитаж", img:"https://source.unsplash.com/600x400/?hermitage-garden,moscow" },
+{ name:"Серебряный бор", img:"https://source.unsplash.com/600x400/?silver-forest,moscow" },
+{ name:"Коломенское", img:"https://source.unsplash.com/600x400/?kolomenskoye,moscow" },
+{ name:"Винзавод", img:"https://source.unsplash.com/600x400/?winzavod,moscow" },
+{ name:"Чистые пруды", img:"https://source.unsplash.com/600x400/?chistye-prudy,moscow" },
+{ name:"Кусково", img:"https://source.unsplash.com/600x400/?kuskovo,moscow" },
+{ name:"Ботанический сад", img:"https://source.unsplash.com/600x400/?botanical-garden,moscow" },
+{ name:"Зарядье", img:"https://source.unsplash.com/600x400/?zaryadye-park,moscow" },
+{ name:"Лосиный остров", img:"https://source.unsplash.com/600x400/?losiny-island,moscow" },
+{ name:"Китай-город", img:"https://source.unsplash.com/600x400/?kitay-gorod,moscow" },
+{ name:"Таганка", img:"https://source.unsplash.com/600x400/?taganka,moscow" },
+{ name:"Даниловский рынок", img:"https://source.unsplash.com/600x400/?danilovsky-market,moscow" },
+{ name:"Крутицкое подворье", img:"https://source.unsplash.com/600x400/?krutitskoye,moscow" },
+{ name:"Сад Баумана", img:"https://source.unsplash.com/600x400/?bauman-garden,moscow" },
+{ name:"Аптекарский огород", img:"https://source.unsplash.com/600x400/?aptekarsky-garden,moscow" },
+{ name:"Парк Сокольники", img:"https://source.unsplash.com/600x400/?sokolniki-park,moscow" },
+{ name:"Музеон", img:"https://source.unsplash.com/600x400/?muzeon,moscow" },
+{ name:"Симонов монастырь", img:"https://source.unsplash.com/600x400/?simon-monastery,moscow" },
+{ name:"Новодевичий монастырь", img:"https://source.unsplash.com/600x400/?novodevichy,moscow" },
+{ name:"ГЭС-2", img:"https://source.unsplash.com/600x400/?ges2,moscow" },
+{ name:"Парк Яуза", img:"https://source.unsplash.com/600x400/?yauza-park,moscow" },
+{ name:"Северный речной вокзал", img:"https://source.unsplash.com/600x400/?north-river-station,moscow" }
 ];
-// 30 занятий
+
 const activities=[
-"Фотосессия","Новое кафе","Самокат","Атмосферное видео","Пикник","Настолки",
-"Музыка","15000 шагов","Познакомиться","Лучший кофе","Скетч","Книга на лавке",
-"Лодка","Стритфуд","Снять reels","Необычные двери","Челлендж 500₽",
-"Плейлист","Бумажный самолетик","Бадминтон","10 собак","Мини-влог","Скрытый дворик",
-"Поговорить о мечтах","Маршрут на карте","Дегустация десертов","Самая красивая лавка",
-"Придумать историю прохожему","Посидеть в тишине","Смешной челлендж"
+{ name:"Фотосессия", img:"https://source.unsplash.com/600x400/?photography,moscow" },
+{ name:"Новое кафе", img:"https://source.unsplash.com/600x400/?cafe,moscow" },
+{ name:"Самокат", img:"https://source.unsplash.com/600x400/?scooter,moscow" },
+{ name:"Атмосферное видео", img:"https://source.unsplash.com/600x400/?video,moscow" },
+{ name:"Пикник", img:"https://source.unsplash.com/600x400/?picnic,moscow" },
+{ name:"Настолки", img:"https://source.unsplash.com/600x400/?board-games" },
+{ name:"Музыка", img:"https://source.unsplash.com/600x400/?street-music" },
+{ name:"15000 шагов", img:"https://source.unsplash.com/600x400/?walking,moscow" },
+{ name:"Познакомиться", img:"https://source.unsplash.com/600x400/?meeting,people" },
+{ name:"Лучший кофе", img:"https://source.unsplash.com/600x400/?coffee,moscow" },
+{ name:"Скетч", img:"https://source.unsplash.com/600x400/?drawing,sketch" },
+{ name:"Книга на лавке", img:"https://source.unsplash.com/600x400/?reading,park" },
+{ name:"Лодка", img:"https://source.unsplash.com/600x400/?boat,park" },
+{ name:"Стритфуд", img:"https://source.unsplash.com/600x400/?street-food" },
+{ name:"Снять reels", img:"https://source.unsplash.com/600x400/?reels,video" },
+{ name:"Необычные двери", img:"https://source.unsplash.com/600x400/?doors,moscow" },
+{ name:"Челлендж 500₽", img:"https://source.unsplash.com/600x400/?challenge,moscow" },
+{ name:"Плейлист", img:"https://source.unsplash.com/600x400/?playlist,music" },
+{ name:"Бумажный самолетик", img:"https://source.unsplash.com/600x400/?paper-plane" },
+{ name:"Бадминтон", img:"https://source.unsplash.com/600x400/?badminton" },
+{ name:"10 собак", img:"https://source.unsplash.com/600x400/?dogs,moscow" },
+{ name:"Мини-влог", img:"https://source.unsplash.com/600x400/?vlog,moscow" },
+{ name:"Скрытый дворик", img:"https://source.unsplash.com/600x400/?hidden-courtyard" },
+{ name:"Поговорить о мечтах", img:"https://source.unsplash.com/600x400/?talk,people" },
+{ name:"Маршрут на карте", img:"https://source.unsplash.com/600x400/?map" },
+{ name:"Дегустация десертов", img:"https://source.unsplash.com/600x400/?dessert" },
+{ name:"Самая красивая лавка", img:"https://source.unsplash.com/600x400/?bench,moscow" },
+{ name:"Придумать историю прохожему", img:"https://source.unsplash.com/600x400/?story-telling" },
+{ name:"Посидеть в тишине 20 минут", img:"https://source.unsplash.com/600x400/?quiet,park" },
+{ name:"Смешной челлендж", img:"https://source.unsplash.com/600x400/?fun-challenge" }
 ];
-// 20 образов
+
 const outfits=[
-"Спортивный кэжуал","Минимализм","Street-style","Романтичный","Total white",
-"Оверсайз худи","Пиджак + кроссовки","Летнее платье","Гранж","Бежевый монохром",
-"Винтаж","Smart casual","Кожаная куртка","Джинсы + рубашка","Яркие аксессуары",
-"Total denim","Пастель","Темный стиль","Сканди","Арт-образ"
+{ name:"Спортивный кэжуал", img:"https://source.unsplash.com/600x400/?sport,casual" },
+{ name:"Минимализм", img:"https://source.unsplash.com/600x400/?minimal,style" },
+{ name:"Street-style", img:"https://source.unsplash.com/600x400/?street-style" },
+{ name:"Романтичный", img:"https://source.unsplash.com/600x400/?romantic,style" },
+{ name:"Total white", img:"https://source.unsplash.com/600x400/?white,clothes" },
+{ name:"Оверсайз худи", img:"https://source.unsplash.com/600x400/?hoodie,oversize" },
+{ name:"Пиджак + кроссовки", img:"https://source.unsplash.com/600x400/?jacket,sneakers" },
+{ name:"Летнее платье", img:"https://source.unsplash.com/600x400/?summer,dress" },
+{ name:"Гранж", img:"https://source.unsplash.com/600x400/?grunge,style" },
+{ name:"Бежевый монохром", img:"https://source.unsplash.com/600x400/?beige,clothes" },
+{ name:"Винтаж", img:"https://source.unsplash.com/600x400/?vintage,style" },
+{ name:"Smart casual", img:"https://source.unsplash.com/600x400/?smart-casual" },
+{ name:"Кожаная куртка", img:"https://source.unsplash.com/600x400/?leather,jacket" },
+{ name:"Джинсы + рубашка", img:"https://source.unsplash.com/600x400/?jeans,shirt" },
+{ name:"Яркие аксессуары", img:"https://source.unsplash.com/600x400/?fashion,accessories" },
+{ name:"Total denim", img:"https://source.unsplash.com/600x400/?denim" },
+{ name:"Пастель", img:"https://source.unsplash.com/600x400/?pastel,clothes" },
+{ name:"Темный стиль", img:"https://source.unsplash.com/600x400/?dark,fashion" },
+{ name:"Сканди", img:"https://source.unsplash.com/600x400/?scandi,style" },
+{ name:"Арт-образ", img:"https://source.unsplash.com/600x400/?art,style" }
 ];
-function randomFrom(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
 function spinEffect(el,callback){
-el.classList.add("spin");
-let count=0;
-let interval=setInterval(()=>{
-el.innerText="...";
-count++;
-if(count>10){clearInterval(interval);el.classList.remove("spin");callback();}
-},100);
+  el.classList.add("spin");
+  let count=0;
+  let interval=setInterval(()=>{
+    el.innerText="...";
+    count++;
+    if(count>10){clearInterval(interval);el.classList.remove("spin");callback();}
+  },100);
 }
-function spinPlace(){
-let el=document.getElementById("place");
-spinEffect(el,()=>{
-let r=randomFrom(places);
-el.innerText=r;
-document.getElementById("placeImg").src="https://source.unsplash.com/600x400/?moscow,"+r;
-});
-}
-function spinActivity(){
-let el=document.getElementById("activity");
-spinEffect(el,()=>{
-let r=randomFrom(activities);
-el.innerText=r;
-document.getElementById("activityImg").src="https://source.unsplash.com/600x400/?"+r;
-});
-}
-function spinOutfit(){
-let el=document.getElementById("outfit");
-spinEffect(el,()=>{
-let r=randomFrom(outfits);
-el.innerText=r;
-document.getElementById("outfitImg").src="https://source.unsplash.com/600x400/?fashion,"+r;
-});
-}
-function surprise(){
-spinPlace();
-setTimeout(spinActivity,1200);
-setTimeout(spinOutfit,2400);
-}
+function randomFrom(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function spinPlace(){spinEffect(document.getElementById("place"),()=>{
+  let r=randomFrom(places);
+  document.getElementById("place").innerText=r.name;
+  document.getElementById("placeImg").src=r.img;
+});}
+function spinActivity(){spinEffect(document.getElementById("activity"),()=>{
+  let r=randomFrom(activities);
+  document.getElementById("activity").innerText=r.name;
+  document.getElementById("activityImg").src=r.img;
+});}
+function spinOutfit(){spinEffect(document.getElementById("outfit"),()=>{
+  let r=randomFrom(outfits);
+  document.getElementById("outfit").innerText=r.name;
+  document.getElementById("outfitImg").src=r.img;
+});}
+function surprise(){spinPlace(); setTimeout(spinActivity,1200); setTimeout(spinOutfit,2400);}
 function toggleDark(){document.body.classList.toggle("dark");}
 </script>
 </body>
